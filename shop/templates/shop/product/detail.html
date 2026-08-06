@@ -1,0 +1,174 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}{{ product.name }} | کفشینو{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12 max-w-7xl">
+    
+    <!-- آدرس‌دهی (Breadcrumbs) با ظاهر ظریف‌تر -->
+    <nav class="flex items-center gap-2 text-sm text-gray-400 mb-8 overflow-x-auto whitespace-nowrap pb-2">
+        <a href="/" class="hover:text-black transition">خانه</a>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+        <a href="#" class="hover:text-black transition">{{ product.category.name }}</a>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+        <span class="text-gray-900 font-medium">{{ product.name }}</span>
+    </nav>
+
+    <div class="flex flex-col lg:flex-row gap-12">
+        
+        <!-- بخش تصاویر (سمت چپ در دسکتاپ) -->
+        <div class="w-full lg:w-3/5">
+            <div class="sticky top-24">
+                <div class="bg-white rounded-[2rem] p-4 shadow-2xl shadow-gray-200/50 overflow-hidden group">
+                    <img id="main-image" src="{{ product.image.url }}" alt="{{ product.name }}" 
+                         class="w-full h-auto object-cover rounded-[1.5rem] transition-transform duration-500 group-hover:scale-105">
+                </div>
+                
+                <!-- گالری تصاویر کوچک -->
+                <div class="flex gap-4 mt-6 overflow-x-auto pb-2 justify-center lg:justify-start">
+                    <div class="cursor-pointer border-2 border-[#428e91] rounded-2xl p-1 bg-white shrink-0" onclick="updateMainImage(this.querySelector('img').src, this)">
+                        <img src="{{ product.image.url }}" class="w-20 h-20 object-cover rounded-xl">
+                    </div>
+                    {% for img in product.images.all %}
+                    <div class="cursor-pointer border-2 border-transparent hover:border-gray-200 rounded-2xl p-1 bg-white shrink-0 transition" onclick="updateMainImage(this.querySelector('img').src, this)">
+                        <img src="{{ img.image.url }}" class="w-20 h-20 object-cover rounded-xl">
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- بخش اطلاعات (سمت راست در دسکتاپ) -->
+        <div class="w-full lg:w-2/5 flex flex-col">
+            <div class="mb-6">
+                <span class="inline-block px-3 py-1 bg-[#428e91]/10 text-[#428e91] text-xs font-bold rounded-full mb-4">موجود در انبار</span>
+                <h1 class="text-4xl font-black text-gray-900 leading-tight mb-2">{{ product.name }}</h1>
+                <p class="text-gray-400 text-sm">شناسه محصول: {{ product.id }}DKF</p>
+            </div>
+
+            <!-- قیمت -->
+            <div class="flex items-center gap-4 mb-8">
+                <span class="text-4xl font-black text-[#428e91]">{{ product.price }}</span>
+                <span class="text-lg text-gray-500 font-bold">تومان</span>
+            </div>
+
+            <hr class="border-gray-100 mb-8">
+
+            <!-- انتخاب سایز -->
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <label class="text-lg font-bold text-gray-800">انتخاب سایز</label>
+                    <a href="#" class="text-sm text-[#428e91] underline">راهنمای سایز</a>
+                </div>
+                <div class="grid grid-cols-4 sm:grid-cols-6 gap-3">
+                    {% for size in product.sizes.all %}
+                    <button class="size-btn h-12 flex items-center justify-center border-2 border-gray-100 rounded-2xl font-bold text-gray-600 hover:border-[#428e91] hover:text-[#428e91] transition-all"
+                            onclick="selectSize(this)">
+                        {{ size.name }}
+                    </button>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- دکمه‌های عملیات -->
+            <div class="flex gap-4 mb-10">
+    <!-- فرم افزودن به سبد خرید (بخش اصلی) -->
+    <form action="{% url 'cart:cart_add' product.id %}" method="post" class="flex-1">
+        {% csrf_token %}
+        <!-- فیلد مخفی برای ذخیره سایز -->
+        <input type="hidden" name="size" id="selected-size" value="">
+        
+        <button type="submit" onclick="return checkSize()" 
+                class="w-full bg-black text-white py-5 rounded-[1.5rem] font-black text-xl shadow-xl shadow-black/20 hover:bg-[#428e91] hover:shadow-[#428e91]/40 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+            افزودن به سبد خرید
+        </button>
+    </form>
+
+    <!-- دکمه علاقه‌مندی (بیرون از فرم) -->
+    <button class="w-16 h-16 border-2 border-gray-100 rounded-[1.5rem] flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-100 transition-all shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+    </button>
+</div>
+
+            <!-- ویژگی‌های اطمینان -->
+            <div class="grid grid-cols-3 gap-4 p-6 bg-gray-50 rounded-[2rem] border border-gray-100">
+                <div class="text-center">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center mx-auto mb-2 shadow-sm text-[#428e91]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" /></svg>
+                    </div>
+                    <span class="text-[10px] font-bold text-gray-500">ضمانت اصالت</span>
+                </div>
+                <div class="text-center border-x border-gray-200">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center mx-auto mb-2 shadow-sm text-[#428e91]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                    </div>
+                    <span class="text-[10px] font-bold text-gray-500">۷ روز ضمانت بازگشت</span>
+                </div>
+                <div class="text-center">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center mx-auto mb-2 shadow-sm text-[#428e91]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" /><path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05a2.5 2.5 0 014.9 0H18a1 1 0 001-1V8a1 1 0 00-1-1h-4z" /></svg>
+                    </div>
+                    <span class="text-[10px] font-bold text-gray-500">ارسال سریع</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- توضیحات و نظرات -->
+    <div class="mt-24">
+        <div class="flex gap-8 border-b border-gray-100 mb-8">
+            <button class="pb-4 border-b-4 border-[#428e91] font-black text-lg">توضیحات محصول</button>
+            <button class="pb-4 text-gray-400 font-bold text-lg">نظرات ({{ product.comments.count|default:"۰" }})</button>
+        </div>
+        <div class="prose max-w-none text-gray-600 leading-loose">
+            {{ product.description|linebreaks }}
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateMainImage(src, element) {
+        document.getElementById('main-image').src = src;
+        // تغییر استایل دور عکس‌های کوچک
+        document.querySelectorAll('.shrink-0').forEach(el => el.classList.remove('border-[#428e91]'));
+        document.querySelectorAll('.shrink-0').forEach(el => el.classList.add('border-transparent'));
+        element.classList.remove('border-transparent');
+        element.classList.add('border-[#428e91]');
+    }
+
+    function selectSize(btn) {
+    // حذف استایل از بقیه دکمه‌ها
+    document.querySelectorAll('.size-btn').forEach(b => {
+        b.classList.remove('bg-[#428e91]', 'text-white', 'border-[#428e91]');
+        b.classList.add('text-gray-600', 'border-gray-100');
+    });
+    // اضافه کردن استایل به دکمه کلیک شده
+    btn.classList.remove('text-gray-600', 'border-gray-100');
+    btn.classList.add('bg-[#428e91]', 'text-white', 'border-[#428e91]');
+
+    // نکته مهم: ریختن مقدار سایز در اینپوت فرم
+    document.getElementById('selected-size').value = btn.innerText.trim();
+}
+
+    function selectSize(btn) {
+        // کدهای قبلی تغییر رنگ دکمه ...
+        // مقدار سایز را در اینپوت مخفی بریز
+        document.getElementById('selected-size').value = btn.innerText.trim();
+    }
+    
+    function checkSize() {
+    const size = document.getElementById('selected-size').value;
+    if (!size) {
+        alert('لطفاً ابتدا سایز مورد نظر خود را انتخاب کنید.');
+        return false; // فرم ارسال نمی‌شود
+    }
+    return true; // فرم ارسال می‌شود
+}
+</script>
+{% endblock %}

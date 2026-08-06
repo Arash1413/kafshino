@@ -1,0 +1,82 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}سبد خرید | کفشینو{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12 mb-20">
+    <h1 class="text-3xl font-black mb-10 text-right text-gray-800">سبد خرید شما</h1>
+    
+    <div class="flex flex-col lg:flex-row-reverse gap-10">
+        <!-- لیست محصولات موجود در سبد -->
+        <div class="flex-1 bg-white rounded-[2rem] p-8 shadow-sm border border-gray-50">
+            {% if cart %}
+            <div class="overflow-x-auto">
+                <table class="w-full text-right">
+                    <thead>
+                        <tr class="text-gray-400 border-b border-gray-50 pb-4">
+                            <th class="pb-4 font-medium text-sm">محصول</th>
+                            <th class="pb-4 font-medium text-sm">سایز</th>
+                            <th class="pb-4 font-medium text-sm text-center">تعداد</th>
+                            <th class="pb-4 font-medium text-sm text-left">قیمت کل</th>
+                            <th class="pb-4"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        {% for item in cart %}
+                        {% with product=item.product %}
+                        <tr>
+                            <td class="py-6 flex items-center gap-4 flex-row-reverse">
+                                <img src="{{ product.image.url }}" class="w-20 h-20 rounded-2xl object-cover shadow-sm">
+                                <span class="font-bold text-gray-800">{{ product.name }}</span>
+                            </td>
+                            <td class="py-6 font-bold text-gray-500 text-center">{{ item.size }}</td>
+                            <td class="py-6 text-center font-bold text-gray-700">{{ item.quantity }}</td>
+                            <td class="py-6 text-left font-black text-[#428e91]">{{ item.total_price }} تومان</td>
+                            <td class="py-6 text-left">
+                                <!-- دکمه حذف -->
+                                <a href="{% url 'cart:cart_remove' product.id item.size %}" class="text-red-400 hover:text-red-600 transition">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endwith %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-10">
+                <p class="text-gray-400 mb-6">سبد خرید شما فعلاً خالی است!</p>
+                <a href="/" class="inline-block bg-[#428e91] text-white px-8 py-3 rounded-full font-bold shadow-lg shadow-[#428e91]/30 hover:scale-105 transition">بازگشت به فروشگاه</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- باکس مجموع قیمت و تسویه حساب -->
+        <div class="w-full lg:w-96">
+            <div class="bg-gray-50 rounded-[2rem] p-8 border border-gray-100 sticky top-24">
+                <h2 class="text-xl font-black mb-6 text-right">خلاصه سفارش</h2>
+                <div class="flex justify-between flex-row-reverse mb-4 text-sm">
+                    <span class="text-gray-500">مجموع محصولات:</span>
+                    <span class="font-bold">{{ cart.get_total_price }} تومان</span>
+                </div>
+                <div class="flex justify-between flex-row-reverse mb-4 text-sm">
+                    <span class="text-gray-500">هزینه ارسال:</span>
+                    <span class="text-green-600 font-bold">رایگان</span>
+                </div>
+                <hr class="my-6 border-gray-200">
+                <div class="flex justify-between flex-row-reverse mb-8">
+                    <span class="text-lg font-bold">مبلغ نهایی:</span>
+                    <span class="text-2xl font-black text-[#428e91]">{{ cart.get_total_price }} تومان</span>
+                </div>
+                <a href="#" class="block w-full text-center bg-black text-white py-5 rounded-2xl font-black text-lg hover:bg-[#428e91] transition shadow-xl shadow-black/10">
+                    تکمیل خرید و ثبت آدرس
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

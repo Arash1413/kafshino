@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}کفشینو{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @font-face { font-family: 'Vazir'; src: url('https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.woff2'); }
+        body { font-family: 'Vazir', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- هدر ثابت سایت -->
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 p-4 shadow-sm">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-2xl font-black text-gray-800">کفشینو</div>
+            
+            <nav>
+                <ul class="flex gap-8 text-gray-600 font-medium">
+                    <li><a href="/" class="hover:text-black">خانه</a></li>
+                    <li><a href="/" class="text-black border-b-2 border-black">فروشگاه</a></li>
+                    <li><a href="#" class="hover:text-black">درباره ما</a></li>
+                </ul>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <!-- آیکون سبد خرید -->
+                <a href="{% url 'cart:cart_detail' %}" class="relative p-2 bg-gray-100 rounded-full text-gray-600 hover:bg-black hover:text-white transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                    {% if cart|length > 0 %}
+                    <span class="absolute -top-1 -right-1 bg-[#428e91] text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full border-2 border-white">
+                        {{ cart|length }}
+                    </span>
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>
