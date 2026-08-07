@@ -1,15 +1,22 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Category, Product
+from django.db.models import Q  # این را حتماً اضافه کنید
 
 def product_list(request, category_slug=None):
     category = None
     categories = Category.objects.all()
     products = Product.objects.filter(available=True)
     
-    # گرفتن ۳ تا از جدیدترین محصولات
+    # منطق جستجو
+    query = request.GET.get('query')
+    if query:
+        products = products.filter(
+            Q(name__icontains=query) | 
+            Q(description__icontains=query)
+        )
+
+    # گرفتن ۳ تا از جدیدترین محصولات (برای نمایش در سایدبار یا بخش‌های دیگر)
     latest_products = Product.objects.filter(available=True).order_by('-created')[:3]
-    
-    # فعلاً به عنوان نمونه ۳ تا محصول دیگر برای پرفروش‌ها
     best_selling = Product.objects.filter(available=True).order_by('?')[:3]
 
     if category_slug:
@@ -21,7 +28,8 @@ def product_list(request, category_slug=None):
         'categories': categories,
         'products': products,
         'latest_products': latest_products,
-        'best_selling': best_selling
+        'best_selling': best_selling,
+        'query': query # ارسال متن جستجو به تمپلیت
     })
 
 
