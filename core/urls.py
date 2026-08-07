@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('cart/', include('cart.urls', namespace='cart')), 
     path('account/', include('account.urls', namespace='account')), 
+    path('orders/', include('orders.urls', namespace='orders')), # این خط را اضافه کنید
     path('', include('shop.urls', namespace='shop')),
 ]
 

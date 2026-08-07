@@ -72,8 +72,8 @@
                     <span class="text-lg font-bold">مبلغ نهایی:</span>
                     <span class="text-2xl font-black text-[#428e91]">{{ cart.get_total_price }} تومان</span>
                 </div>
-                <a href="#" class="block w-full text-center bg-black text-white py-5 rounded-2xl font-black text-lg hover:bg-[#428e91] transition shadow-xl shadow-black/10">
-                    تکمیل خرید و ثبت آدرس
+                <a href="{% url 'orders:order_create' %}" class="block w-full text-center bg-black text-white py-5 rounded-2xl font-black text-lg hover:bg-[#428e91] transition shadow-xl shadow-black/10">
+    تکمیل خرید و ثبت آدرس
                 </a>
             </div>
         </div>

@@ -1,0 +1,30 @@
+{% extends "shop/base.html" %}
+
+{% block title %}سفارش ثبت شد | کفشینو{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-24 text-center">
+    <div class="max-w-md mx-auto bg-white p-10 rounded-[3rem] shadow-2xl border border-green-50">
+        <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+            </svg>
+        </div>
+        
+        <h1 class="text-3xl font-black text-gray-800 mb-4">سفارش شما با موفقیت ثبت شد!</h1>
+        <p class="text-gray-500 mb-8 leading-relaxed">
+            ممنون از اعتماد شما به کفشینو. شماره سفارش شما <span class="font-bold text-black">#{{ order.id }}</span> است. 
+            همکاران ما به زودی برای هماهنگی با شما تماس می‌گیرند.
+        </p>
+        
+        <div class="space-y-3">
+            <a href="/" class="block w-full bg-black text-white py-4 rounded-2xl font-bold hover:bg-[#428e91] transition shadow-lg">
+                بازگشت به فروشگاه
+            </a>
+            <a href="#" class="block w-full text-[#428e91] font-bold text-sm">
+                پیگیری سفارشات من
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

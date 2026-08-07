@@ -60,3 +60,11 @@ class Cart:
     def clear(self):
         del self.session[settings.CART_SESSION_ID]
         self.save()
+
+
+    # در انتهای کلاس Cart در فایل cart/cart.py
+    def __len__(self):
+        """
+        محاسبه تعداد کل آیتم‌های موجود در سبد خرید
+        """
+        return sum(item['quantity'] for item in self.cart.values())
