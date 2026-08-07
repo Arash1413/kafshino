@@ -27,18 +27,29 @@
             </nav>
 
             <div class="flex items-center gap-4">
-                <!-- آیکون سبد خرید -->
-                <a href="{% url 'cart:cart_detail' %}" class="relative p-2 bg-gray-100 rounded-full text-gray-600 hover:bg-black hover:text-white transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                    </svg>
-                    {% if cart|length > 0 %}
-                    <span class="absolute -top-1 -right-1 bg-[#428e91] text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full border-2 border-white">
-                        {{ cart|length }}
-                    </span>
-                    {% endif %}
-                </a>
-            </div>
+    {% if request.user.is_authenticated %}
+        <div class="flex items-center gap-2 bg-gray-50 p-2 rounded-2xl">
+            <span class="text-sm font-bold text-gray-700">{{ request.user.first_name }} خوش آمدی</span>
+            <a href="{% url 'account:logout' %}" class="text-red-400 hover:text-red-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+            </a>
+        </div>
+    {% else %}
+        <a href="{% url 'account:login' %}" class="bg-black text-white px-6 py-2 rounded-full text-sm font-bold hover:bg-[#428e91] transition">
+            ورود / ثبت‌نام
+        </a>
+    {% endif %}
+    
+    <!-- آیکون سبد خرید -->
+    <a href="{% url 'cart:cart_detail' %}" class="relative p-2 bg-gray-100 rounded-full text-gray-600 hover:bg-black hover:text-white transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+        <span class="absolute -top-1 -right-1 bg-[#428e91] text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full border-2 border-white">
+            {{ cart|length }}
+        </span>
+    </a>
+</div>
         </div>
     </header>
 

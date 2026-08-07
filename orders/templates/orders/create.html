@@ -1,0 +1,73 @@
+{% extends "shop/base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12 max-w-6xl">
+    <h1 class="text-3xl font-black mb-10 text-right">تسویه حساب و اطلاعات ارسال</h1>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <!-- فرم اطلاعات (سمت راست) -->
+        <div class="lg:col-span-2 order-2 lg:order-1">
+            <div class="bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-50">
+                <form method="post" class="space-y-6 text-right">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block mb-2 font-bold text-gray-700">نام</label>
+                            {{ form.first_name }}
+                        </div>
+                        <div>
+                            <label class="block mb-2 font-bold text-gray-700">نام خانوادگی</label>
+                            {{ form.last_name }}
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-bold text-gray-700">شماره موبایل</label>
+                        {{ form.phone }}
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-bold text-gray-700">شهر</label>
+                        {{ form.city }}
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-bold text-gray-700">آدرس دقیق</label>
+                        {{ form.address }}
+                    </div>
+                    <button type="submit" class="w-full bg-[#428e91] text-white py-5 rounded-2xl font-black text-xl shadow-lg hover:bg-black transition">
+                        ثبت سفارش و پرداخت نهایی
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- خلاصه سفارش (سمت چپ) -->
+        <div class="order-1 lg:order-2">
+            <div class="bg-gray-800 text-white rounded-[2.5rem] p-8 sticky top-24">
+                <h2 class="text-xl font-black mb-6">فاکتور نهایی</h2>
+                <div class="space-y-4 mb-8">
+                    {% for item in cart %}
+                    <div class="flex justify-between items-center text-sm border-b border-white/10 pb-3">
+                        <span class="text-white/60">× {{ item.quantity }}</span>
+                        <div class="text-right">
+                            <p class="font-bold">{{ item.product.name }}</p>
+                            <p class="text-[10px] text-white/40">سایز: {{ item.size }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="flex justify-between text-lg font-black text-[#428e91]">
+                    <span>{{ cart.get_total_price }} تومان</span>
+                    <span>مبلغ قابل پرداخت</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    input, textarea {
+        width: 100%; padding: 1rem; background: #f9fafb; border: 2px solid #f3f4f6;
+        border-radius: 1.2rem; outline: none; transition: 0.3s; text-align: right;
+    }
+    input:focus { border-color: #428e91; background: white; }
+</style>
+{% endblock %}

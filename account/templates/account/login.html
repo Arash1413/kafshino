@@ -1,0 +1,42 @@
+{% extends "shop/base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-20 flex justify-center">
+    <div class="w-full max-w-md bg-white rounded-[2.5rem] shadow-xl p-10 border border-gray-50">
+        <h2 class="text-3xl font-black text-center mb-8 text-gray-800">ورود به حساب</h2>
+        
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            {% for field in form %}
+            <div>
+                {{ field }}
+                {% if field.errors %}
+                <p class="text-red-500 text-xs mt-1">{{ field.errors.0 }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+            
+            <button type="submit" class="w-full bg-black text-white py-4 rounded-2xl font-black text-lg hover:bg-[#428e91] transition shadow-lg">
+                ورود به کفشینو
+            </button>
+        </form>
+
+        <div class="mt-8 text-center text-sm text-gray-500">
+            حساب کاربری ندارید؟ <a href="{% url 'account:register' %}" class="text-[#428e91] font-bold">ایجاد حساب جدید</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    input {
+        width: 100%;
+        padding: 1rem;
+        background: #f9fafb;
+        border: 2px solid #f3f4f6;
+        border-radius: 1rem;
+        outline: none;
+        transition: all 0.3s;
+    }
+    input:focus { border-color: #428e91; background: white; }
+</style>
+{% endblock %}
