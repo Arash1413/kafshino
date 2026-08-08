@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse  # ۱. این را اضافه کن
+from django.contrib.auth.models import User
 
 class Size(models.Model):
     name = models.CharField(max_length=10, verbose_name="سایز")
@@ -19,6 +20,17 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+class Brand(models.Model):
+    name = models.CharField(max_length=100, verbose_name="نام برند")
+    slug = models.SlugField(max_length=100, unique=True)
+
+    class Meta:
+        verbose_name = "برند"
+        verbose_name_plural = "برندها"
+
+    def __str__(self):
+        return self.name
+
 class Product(models.Model):
     sizes = models.ManyToManyField(Size, related_name='products', verbose_name="سایزهای موجود")
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
@@ -30,6 +42,7 @@ class Product(models.Model):
     available = models.BooleanField(default=True, verbose_name="موجود")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='products', null=True, blank=True, verbose_name="برند")
 
     def get_absolute_url(self):
     # حتماً کلمه shop: را قبل از نام آدرس بگذارید
@@ -53,3 +66,24 @@ class ProductImage(models.Model):
         verbose_name_plural = "گالری تصاویر"
 
 
+
+# در فایل shop/models.py
+
+
+
+# حالا مدل Product را ویرایش کنید و فیلد برند را به آن اضافه کنید:
+class Comment(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments', verbose_name="محصول")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments', verbose_name="کاربر")
+    content = models.TextField(verbose_name="متن نظر")
+    rating = models.PositiveSmallIntegerField(default=5, verbose_name="امتیاز") # ۱ تا ۵
+    active = models.BooleanField(default=True, verbose_name="وضعیت انتشار") # برای تایید توسط مدیر
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created']
+        verbose_name = "نظر"
+        verbose_name_plural = "نظرات"
+
+    def __str__(self):
+        return f'نظر {self.user.first_name} برای {self.product.name}'

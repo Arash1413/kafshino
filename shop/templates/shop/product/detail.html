@@ -6,18 +6,18 @@
 {% block content %}
 <div class="container mx-auto px-4 py-12 max-w-7xl">
     
-    <!-- آدرس‌دهی (Breadcrumbs) با ظاهر ظریف‌تر -->
+    <!-- آدرس‌دهی (Breadcrumbs) -->
     <nav class="flex items-center gap-2 text-sm text-gray-400 mb-8 overflow-x-auto whitespace-nowrap pb-2">
         <a href="/" class="hover:text-black transition">خانه</a>
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-        <a href="#" class="hover:text-black transition">{{ product.category.name }}</a>
+        <a href="{% url 'shop:product_list_by_category' product.category.slug %}" class="hover:text-black transition">{{ product.category.name }}</a>
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
         <span class="text-gray-900 font-medium">{{ product.name }}</span>
     </nav>
 
     <div class="flex flex-col lg:flex-row gap-12">
         
-        <!-- بخش تصاویر (سمت چپ در دسکتاپ) -->
+        <!-- بخش تصاویر -->
         <div class="w-full lg:w-3/5">
             <div class="sticky top-24">
                 <div class="bg-white rounded-[2rem] p-4 shadow-2xl shadow-gray-200/50 overflow-hidden group">
@@ -25,7 +25,6 @@
                          class="w-full h-auto object-cover rounded-[1.5rem] transition-transform duration-500 group-hover:scale-105">
                 </div>
                 
-                <!-- گالری تصاویر کوچک -->
                 <div class="flex gap-4 mt-6 overflow-x-auto pb-2 justify-center lg:justify-start">
                     <div class="cursor-pointer border-2 border-[#428e91] rounded-2xl p-1 bg-white shrink-0" onclick="updateMainImage(this.querySelector('img').src, this)">
                         <img src="{{ product.image.url }}" class="w-20 h-20 object-cover rounded-xl">
@@ -39,7 +38,7 @@
             </div>
         </div>
 
-        <!-- بخش اطلاعات (سمت راست در دسکتاپ) -->
+        <!-- بخش اطلاعات محصول -->
         <div class="w-full lg:w-2/5 flex flex-col">
             <div class="mb-6">
                 <span class="inline-block px-3 py-1 bg-[#428e91]/10 text-[#428e91] text-xs font-bold rounded-full mb-4">موجود در انبار</span>
@@ -47,7 +46,6 @@
                 <p class="text-gray-400 text-sm">شناسه محصول: {{ product.id }}DKF</p>
             </div>
 
-            <!-- قیمت -->
             <div class="flex items-center gap-4 mb-8">
                 <span class="text-4xl font-black text-[#428e91]">{{ product.price }}</span>
                 <span class="text-lg text-gray-500 font-bold">تومان</span>
@@ -73,28 +71,20 @@
 
             <!-- دکمه‌های عملیات -->
             <div class="flex gap-4 mb-10">
-    <!-- فرم افزودن به سبد خرید (بخش اصلی) -->
-    <form action="{% url 'cart:cart_add' product.id %}" method="post" class="flex-1">
-        {% csrf_token %}
-        <!-- فیلد مخفی برای ذخیره سایز -->
-        <input type="hidden" name="size" id="selected-size" value="">
-        
-        <button type="submit" onclick="return checkSize()" 
-                class="w-full bg-black text-white py-5 rounded-[1.5rem] font-black text-xl shadow-xl shadow-black/20 hover:bg-[#428e91] hover:shadow-[#428e91]/40 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-            </svg>
-            افزودن به سبد خرید
-        </button>
-    </form>
+                <form action="{% url 'cart:cart_add' product.id %}" method="post" class="flex-1">
+                    {% csrf_token %}
+                    <input type="hidden" name="size" id="selected-size" value="">
+                    <button type="submit" onclick="return checkSize()" 
+                            class="w-full bg-black text-white py-5 rounded-[1.5rem] font-black text-xl shadow-xl shadow-black/20 hover:bg-[#428e91] transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+                        افزودن به سبد خرید
+                    </button>
+                </form>
 
-    <!-- دکمه علاقه‌مندی (بیرون از فرم) -->
-    <button class="w-16 h-16 border-2 border-gray-100 rounded-[1.5rem] flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-100 transition-all shadow-sm">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-        </svg>
-    </button>
-</div>
+                <button class="w-16 h-16 border-2 border-gray-100 rounded-[1.5rem] flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-100 transition-all shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                </button>
+            </div>
 
             <!-- ویژگی‌های اطمینان -->
             <div class="grid grid-cols-3 gap-4 p-6 bg-gray-50 rounded-[2rem] border border-gray-100">
@@ -108,7 +98,7 @@
                     <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center mx-auto mb-2 shadow-sm text-[#428e91]">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
                     </div>
-                    <span class="text-[10px] font-bold text-gray-500">۷ روز ضمانت بازگشت</span>
+                    <span class="text-[10px] font-bold text-gray-500">۷ روز بازگشت</span>
                 </div>
                 <div class="text-center">
                     <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center mx-auto mb-2 shadow-sm text-[#428e91]">
@@ -122,12 +112,91 @@
 
     <!-- توضیحات و نظرات -->
     <div class="mt-24">
-        <div class="flex gap-8 border-b border-gray-100 mb-8">
-            <button class="pb-4 border-b-4 border-[#428e91] font-black text-lg">توضیحات محصول</button>
-            <button class="pb-4 text-gray-400 font-bold text-lg">نظرات ({{ product.comments.count|default:"۰" }})</button>
+        <div class="flex gap-8 border-b border-gray-100 mb-12">
+            <h2 class="pb-4 border-b-4 border-[#428e91] font-black text-2xl text-gray-800">بررسی و نظرات</h2>
         </div>
-        <div class="prose max-w-none text-gray-600 leading-loose">
-            {{ product.description|linebreaks }}
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-16">
+            <!-- ستون نمایش نظرات (۲/۳ عرض) -->
+            <div class="lg:col-span-2 space-y-10">
+                <div class="prose max-w-none text-gray-600 leading-loose mb-16 bg-white p-8 rounded-[2rem] shadow-sm border border-gray-50">
+                    <h3 class="text-xl font-bold mb-4 text-black">توضیحات محصول</h3>
+                    {{ product.description|linebreaks }}
+                </div>
+
+                <h3 class="text-2xl font-black text-gray-800 mb-8">نظرات خریداران ({{ product.comments.count }})</h3>
+                
+                <div class="space-y-6">
+                    {% for comment in product.comments.all %}
+                        {% if comment.active %}
+                        <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-50 hover:shadow-md transition-all">
+                            <div class="flex justify-between items-start mb-6">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 bg-[#428e91]/10 rounded-2xl flex items-center justify-center font-black text-[#428e91] text-xl">
+                                        {{ comment.user.first_name|first|default:comment.user.username|first }}
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-900">{{ comment.user.first_name }} {{ comment.user.last_name }}</h4>
+                                        <span class="text-xs text-gray-400 font-medium">{{ comment.created|date:"d F Y" }}</span>
+                                    </div>
+                                </div>
+                                <!-- نمایش ستاره‌ها -->
+                                <div class="flex gap-1 text-yellow-400 bg-yellow-50 px-3 py-1 rounded-full">
+                                    <span class="text-sm font-black mr-1">{{ comment.rating }}</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 leading-relaxed text-sm pr-16">{{ comment.content|linebreaks }}</p>
+                        </div>
+                        {% endif %}
+                    {% empty %}
+                        <div class="text-center py-12 bg-gray-50 rounded-[2rem] border border-dashed border-gray-200">
+                            <p class="text-gray-400">هنوز هیچ نظری برای این کفش ثبت نشده است.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- ستون فرم ثبت نظر (۱/۳ عرض) -->
+            <div class="lg:col-span-1">
+                <div class="bg-gray-900 text-white p-8 rounded-[3rem] shadow-2xl sticky top-24">
+                    <h3 class="text-2xl font-black mb-2">ثبت نظر شما</h3>
+                    <p class="text-gray-400 text-sm mb-8">تجربه خود را با دیگران به اشتراک بگذارید.</p>
+
+                    {% if request.user.is_authenticated %}
+                        <form action="{% url 'shop:add_comment' product.id %}" method="post" class="space-y-6">
+                            {% csrf_token %}
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 mb-3 uppercase tracking-wider">امتیاز شما به این محصول</label>
+                                <select name="rating" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 outline-none focus:border-[#428e91] transition text-sm">
+                                    <option value="5" class="text-black">★★★★★ - عالی</option>
+                                    <option value="4" class="text-black">★★★★☆ - خوب</option>
+                                    <option value="3" class="text-black">★★★☆☆ - معمولی</option>
+                                    <option value="2" class="text-black">★★☆☆☆ - ضعیف</option>
+                                    <option value="1" class="text-black">★☆☆☆☆ - خیلی ضعیف</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 mb-3 uppercase tracking-wider">متن نظر</label>
+                                <textarea name="content" required rows="5" placeholder="مثلاً: قالب این کفش کوچیکه یا خیلی راحته..." 
+                                          class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 outline-none focus:border-[#428e91] transition text-sm"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-[#428e91] text-white py-5 rounded-2xl font-black text-lg hover:bg-white hover:text-black transition-all shadow-xl shadow-[#428e91]/20">
+                                ارسال نظر نهایی
+                            </button>
+                        </form>
+                    {% else %}
+                        <div class="text-center py-10 bg-white/5 rounded-[2rem] border border-white/5">
+                            <p class="text-gray-400 text-sm mb-6">برای ثبت نظر، ابتدا باید وارد حساب کاربری خود شوید.</p>
+                            <a href="{% url 'account:login' %}" class="inline-block bg-white text-black px-10 py-4 rounded-2xl font-black hover:bg-[#428e91] hover:text-white transition">
+                                ورود / ثبت‌نام
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -135,7 +204,6 @@
 <script>
     function updateMainImage(src, element) {
         document.getElementById('main-image').src = src;
-        // تغییر استایل دور عکس‌های کوچک
         document.querySelectorAll('.shrink-0').forEach(el => el.classList.remove('border-[#428e91]'));
         document.querySelectorAll('.shrink-0').forEach(el => el.classList.add('border-transparent'));
         element.classList.remove('border-transparent');
@@ -143,32 +211,22 @@
     }
 
     function selectSize(btn) {
-    // حذف استایل از بقیه دکمه‌ها
-    document.querySelectorAll('.size-btn').forEach(b => {
-        b.classList.remove('bg-[#428e91]', 'text-white', 'border-[#428e91]');
-        b.classList.add('text-gray-600', 'border-gray-100');
-    });
-    // اضافه کردن استایل به دکمه کلیک شده
-    btn.classList.remove('text-gray-600', 'border-gray-100');
-    btn.classList.add('bg-[#428e91]', 'text-white', 'border-[#428e91]');
-
-    // نکته مهم: ریختن مقدار سایز در اینپوت فرم
-    document.getElementById('selected-size').value = btn.innerText.trim();
-}
-
-    function selectSize(btn) {
-        // کدهای قبلی تغییر رنگ دکمه ...
-        // مقدار سایز را در اینپوت مخفی بریز
+        document.querySelectorAll('.size-btn').forEach(b => {
+            b.classList.remove('bg-[#428e91]', 'text-white', 'border-[#428e91]');
+            b.classList.add('text-gray-600', 'border-gray-100');
+        });
+        btn.classList.remove('text-gray-600', 'border-gray-100');
+        btn.classList.add('bg-[#428e91]', 'text-white', 'border-[#428e91]');
         document.getElementById('selected-size').value = btn.innerText.trim();
     }
     
     function checkSize() {
-    const size = document.getElementById('selected-size').value;
-    if (!size) {
-        alert('لطفاً ابتدا سایز مورد نظر خود را انتخاب کنید.');
-        return false; // فرم ارسال نمی‌شود
+        const size = document.getElementById('selected-size').value;
+        if (!size) {
+            alert('لطفاً ابتدا سایز مورد نظر خود را انتخاب کنید.');
+            return false;
+        }
+        return true;
     }
-    return true; // فرم ارسال می‌شود
-}
 </script>
 {% endblock %}
