@@ -6,4 +6,5 @@ app_name = 'orders'
 
 urlpatterns = [
     path('create/', views.order_create, name='order_create'),
+    path('my-orders/', views.user_orders, name='user_orders'),
 ]

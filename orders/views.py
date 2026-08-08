@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import OrderItem
 from .forms import OrderCreateForm
 from cart.cart import Cart
+from django.contrib.auth.decorators import login_required
 
 def order_create(request):
     cart = Cart(request)
@@ -26,3 +27,8 @@ def order_create(request):
     else:
         form = OrderCreateForm()
     return render(request, 'orders/create.html', {'cart': cart, 'form': form})
+
+@login_required
+def user_orders(request):
+    orders = request.user.orders.all() # دریافت تمام سفارشات این کاربر
+    return render(request, 'orders/user_orders.html', {'orders': orders})

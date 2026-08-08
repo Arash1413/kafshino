@@ -12,6 +12,31 @@
     </style>
 </head>
 <body class="bg-gray-50">
+    {% if messages %}
+    <div class="fixed top-24 left-1/2 -translate-x-1/2 z-[100] w-full max-w-md px-4 pointer-events-none">
+        {% for message in messages %}
+            <div class="mb-4 p-4 rounded-2xl shadow-2xl flex items-center gap-3 animate-bounce bg-white border-b-4 
+                {% if message.tags == 'success' %} border-green-500 text-green-700 {% else %} border-red-500 text-red-700 {% endif %} pointer-events-auto">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center 
+                    {% if message.tags == 'success' %} bg-green-100 {% else %} bg-red-100 {% endif %}">
+                    {% if message.tags == 'success' %} ✓ {% else %} ! {% endif %}
+                </div>
+                <p class="font-bold text-sm">{{ message }}</p>
+            </div>
+        {% endfor %}
+    </div>
+    <script>
+        // حذف خودکار پیام‌ها بعد از ۵ ثانیه
+        setTimeout(() => {
+            const alerts = document.querySelectorAll('.animate-bounce');
+            alerts.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transition = '0.5s';
+                setTimeout(() => el.remove(), 500);
+            });
+        }, 5000);
+    </script>
+{% endif %}
 
     <!-- هدر ثابت سایت -->
     <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 p-4 shadow-sm">
@@ -41,6 +66,7 @@
     {% if request.user.is_authenticated %}
         <div class="flex items-center gap-2 bg-gray-50 p-2 rounded-2xl">
             <span class="text-sm font-bold text-gray-700">{{ request.user.first_name }} خوش آمدی</span>
+            <a href="{% url 'orders:user_orders' %}" class="text-xs text-[#428e91] font-bold">سفارشات من</a>
             <a href="{% url 'account:logout' %}" class="text-red-400 hover:text-red-600">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

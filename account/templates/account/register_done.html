@@ -1,0 +1,30 @@
+{% extends "shop/base.html" %}
+
+{% block title %}ثبت‌نام موفقیت‌آمیز | کفشینو{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-24 text-center">
+    <div class="max-w-md mx-auto bg-white p-10 rounded-[3rem] shadow-2xl border border-blue-50">
+        <!-- آیکون تایید -->
+        <div class="w-20 h-20 bg-blue-100 text-[#428e91] rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        </div>
+        
+        <h1 class="text-3xl font-black text-gray-800 mb-4">خوش آمدی، {{ new_user.first_name }}!</h1>
+        <p class="text-gray-500 mb-8 leading-relaxed">
+            حساب کاربری شما با موفقیت در کفشینو ایجاد شد. حالا می‌توانید وارد حساب خود شوید و خریدتان را نهایی کنید.
+        </p>
+        
+        <div class="space-y-3">
+            <a href="{% url 'account:login' %}" class="block w-full bg-black text-white py-4 rounded-2xl font-black text-lg hover:bg-[#428e91] transition shadow-lg">
+                ورود به حساب کاربری
+            </a>
+            <a href="/" class="block w-full text-gray-400 font-bold text-sm">
+                بازگشت به صفحه اصلی
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
