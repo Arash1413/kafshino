@@ -115,3 +115,7 @@ def add_comment(request, product_id):
             messages.success(request, "نظر شما با موفقیت ثبت شد.")
     
     return redirect(product.get_absolute_url())
+
+
+def about_us(request):
+    return render(request, 'shop/about.html')

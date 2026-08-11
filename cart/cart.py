@@ -40,10 +40,11 @@ class Cart:
 
     def __iter__(self):
         item_keys = self.cart.keys()
-        # استخراج آی‌دی‌های محصولات از کلیدها
         product_ids = [k.split('_')[0] for k in item_keys]
         products = Product.objects.filter(id__in=product_ids)
-        cart = self.cart.copy()
+        
+        # ساخت یک کپی برای جلوگیری از تغییر داده‌های اصلی سشن
+        cart = {k: v.copy() for k, v in self.cart.items()}
         
         for product in products:
             for key in cart.keys():

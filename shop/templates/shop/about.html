@@ -1,0 +1,83 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}درباره ما | کفشینو{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-16 max-w-6xl">
+    
+    <!-- بخش هیرو (Hero Section) -->
+    <div class="relative overflow-hidden rounded-[3.5rem] bg-gray-900 text-white p-12 lg:p-20 mb-16 shadow-2xl">
+        <div class="relative z-10 max-w-2xl">
+            <h1 class="text-5xl lg:text-7xl font-black mb-6 leading-tight">داستان <span class="text-[#428e91]">کفشینو</span></h1>
+            <p class="text-gray-400 text-lg leading-loose">
+                ما در کفشینو معتقدیم که هر قدم شما باید با اطمینان و راحتی برداشته شود. از سال ۱۴۰۲، ماموریت ما فراهم کردن بهترین و باکیفیت‌ترین کتونی‌های دنیا برای جوانان ایرانی بوده است.
+            </p>
+        </div>
+        <!-- دایره تزیینی -->
+        <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-[#428e91] rounded-full blur-[120px] opacity-20"></div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-24">
+        <div>
+            <h2 class="text-3xl font-black text-gray-800 mb-6 border-r-8 border-[#428e91] pr-4">چرا کفشینو؟</h2>
+            <div class="space-y-8">
+                <div class="flex gap-6 items-start">
+                    <div class="w-14 h-14 bg-white shadow-xl rounded-2xl flex items-center justify-center shrink-0 text-[#428e91]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-xl text-gray-800 mb-2">تضمین اصالت کالا</h4>
+                        <p class="text-gray-500 leading-relaxed">تمامی محصولات موجود در فروشگاه ما مستقیماً از تامین‌کنندگان معتبر تهیه شده و دارای گارانتی اصالت هستند.</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-6 items-start">
+                    <div class="w-14 h-14 bg-white shadow-xl rounded-2xl flex items-center justify-center shrink-0 text-[#428e91]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-xl text-gray-800 mb-2">ارسال فوق‌سریع</h4>
+                        <p class="text-gray-500 leading-relaxed">ما می‌دانیم که شما برای پوشیدن کفش جدیدتان عجله دارید! سفارشات شما در کوتاه‌ترین زمان ممکن به دستتان می‌رسد.</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-6 items-start">
+                    <div class="w-14 h-14 bg-white shadow-xl rounded-2xl flex items-center justify-center shrink-0 text-[#428e91]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-xl text-gray-800 mb-2">تعویض بی‌قید و شرط</h4>
+                        <p class="text-gray-500 leading-relaxed">اگر سایز کفش مناسب نبود یا از خریدتان منصرف شدید، تا ۷ روز فرصت دارید محصول را به راحتی تعویض کنید.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="relative">
+            <div class="bg-[#428e91] rounded-[3rem] aspect-square rotate-3 absolute inset-0"></div>
+            <img src="{% static 'shop/images/about-image.jpg' %}" class="relative z-10 rounded-[3rem] object-cover w-full h-full shadow-2xl -rotate-3 transition hover:rotate-0 duration-500">
+        </div>
+    </div>
+
+    <!-- آمار سایت -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 bg-white p-12 rounded-[3.5rem] shadow-sm border border-gray-50 text-center">
+        <div>
+            <span class="block text-4xl font-black text-gray-800 mb-2">+۱۰ هزار</span>
+            <span class="text-gray-400 font-bold">مشتری راضی</span>
+        </div>
+        <div>
+            <span class="block text-4xl font-black text-gray-800 mb-2">+۵۰۰</span>
+            <span class="text-gray-400 font-bold">مدل متنوع</span>
+        </div>
+        <div>
+            <span class="block text-4xl font-black text-gray-800 mb-2">۲۴/۷</span>
+            <span class="text-gray-400 font-bold">پشتیبانی آنلاین</span>
+        </div>
+        <div>
+            <span class="block text-4xl font-black text-gray-800 mb-2">۱۰۰٪</span>
+            <span class="text-gray-400 font-bold">ضمانت بازگشت</span>
+        </div>
+    </div>
+</div>
+{% endblock %}
