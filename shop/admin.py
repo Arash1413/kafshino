@@ -22,10 +22,10 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     # ستون‌هایی که در لیست محصولات نمایش داده می‌شوند
-    list_display = ['show_image', 'name', 'category', 'price', 'available', 'created']
+    list_display = ['show_image', 'name', 'category', 'price', 'available', 'created', 'is_best_selling', 'is_new']
     
     # فیلترها در سمت راست
-    list_filter = ['available', 'created', 'updated', 'category']
+    list_filter = ['available', 'created', 'updated', 'category', 'is_new', 'is_best_selling']
     
     # فیلدهایی که مستقیماً در لیست قابل ویرایش هستند (بسیار کاربردی)
     list_editable = ['price', 'available']

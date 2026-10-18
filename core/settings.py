@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
 
 
 
@@ -23,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7em_4!k@t=l^ut9+7h9i7554)h)ku+@(6o1bou+(ack8xaho(3'
+SECRET_KEY = config('SECRET_KEY')
 
 AQAYEPARDAKHT_PIN = 'sandbox'
 

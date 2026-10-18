@@ -42,6 +42,8 @@ class Product(models.Model):
     available = models.BooleanField(default=True, verbose_name="موجود")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    is_new = models.BooleanField(default=False, verbose_name="نمایش در جدیدترین‌ها")
+    is_best_selling = models.BooleanField(default=False, verbose_name="نمایش در پرفروش‌ها")
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='products', null=True, blank=True, verbose_name="برند")
 
     def get_absolute_url(self):

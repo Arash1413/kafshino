@@ -13,6 +13,8 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     paid = models.BooleanField(default=False, verbose_name="وضعیت پرداخت")
+    # در کلاس Order
+    tracking_code = models.CharField(max_length=100, null=True, blank=True, verbose_name="کد تراکنش")
 
     class Meta:
         ordering = ['-created']

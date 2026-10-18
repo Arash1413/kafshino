@@ -1,5 +1,6 @@
 import requests
 import json
+from decouple import config
 
 def send_otp_sms(mobile, code):
     url = "https://api.sms.ir/v1/send/verify"
@@ -18,7 +19,8 @@ def send_otp_sms(mobile, code):
     headers = {
         'Content-Type': 'application/json',
         'Accept': 'text/plain',
-        'x-api-key': 'Rwa9Fc0qqhUyGvG1sl6f9h5IcCUOr38B4CJnH64g7SPRi0nd' # کلید عملیاتی (Production) خود را اینجا بگذارید
+       
+        'x-api-key': config('x-api-key')
     }
 
     try:

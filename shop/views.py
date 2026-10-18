@@ -20,8 +20,8 @@ def product_list(request, category_slug=None):
         )
 
     # گرفتن ۳ تا از جدیدترین محصولات (برای نمایش در سایدبار یا بخش‌های دیگر)
-    latest_products = Product.objects.filter(available=True).order_by('-created')[:3]
-    best_selling = Product.objects.filter(available=True).order_by('?')[:3]
+    latest_products = Product.objects.filter(available=True, is_new=True)[:4]
+    best_selling = Product.objects.filter(available=True, is_best_selling=True)[:4]
 
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)

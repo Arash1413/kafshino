@@ -8,4 +8,5 @@ urlpatterns = [
      path('create/', views.order_create, name='order_create'),
     path('verify/', views.otp_verify, name='otp_verify'),
     path('my-orders/', views.user_orders, name='user_orders'),
+    path('payment-callback/', views.payment_callback, name='payment_callback'),
 ]
